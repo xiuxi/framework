@@ -1,0 +1,15 @@
+<div>
+	{{name}}
+	<p><b>聊天</b>测试模块</p>
+	
+	<div style="border:1px solid red;padding:15px;">
+		接收人：<input type="text" ng-model="receivers">
+		<br><br>
+		
+		<input type="text" ng-model="msg">
+		<input type="button" value="发送" ng-click="sendMessage('')"/>
+		
+		新消息：<textarea rows="3" cols="30">{{receiveMsg}}</textarea>
+	</div>
+</div>
+

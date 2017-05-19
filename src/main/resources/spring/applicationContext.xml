@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+						http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+						 http://www.springframework.org/schema/task  
+						http://www.springframework.org/schema/task/spring-task-3.1.xsd 
+						http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+						
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 导入参数配置文件 -->
+	<!-- <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				数据库参数配置文件
+				<value>classpath:${spring.profiles.active}/config.properties</value>
+			</list>
+		</property>
+	</bean> -->
+	
+	<context:property-placeholder location="classpath:${spring.profiles.active}/config.properties"/> 
+	
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 开启IOC注解扫描 -->
+	<!-- 1、扫描Service -->
+	<context:component-scan base-package="com.framework.**.service" />
+	<!-- 2、扫描Startup -->
+	<context:component-scan base-package="com.framework.module.common.startup" />
+	<!-- 3、SpringUtils -->
+	<bean class="com.framework.module.common.utils.SpringUtils" />
+	
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 导入其他Spring资源文件 -->
+	<!-- 1、JPA -->
+	<import resource="applicationContext-jpa.xml" />
+	<!-- 2、MyBatis -->
+	<!-- <import resource="applicationContext-mybatis.xml" /> -->
+	<!-- 3、Shiro -->
+	<import resource="applicationContext-shiro.xml" />
+	<!-- 4、Redis -->
+	<import resource="applicationContext-redis.xml"/>
+	<!-- 5、Quartz -->
+	<import resource="applicationContext-quartz.xml"/>
+	
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+</beans>

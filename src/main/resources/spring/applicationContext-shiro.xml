@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+    http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Realm -->
+	<!-- 1、SWTRealm -->
+	<bean id="SWTRealm" class="com.framework.module.common.security.swt.SWTRealm">
+		<!-- 指定一个ShiroService实现类 -->
+		<property name="shiroService">
+			<bean class="com.framework.module.security.service.SWTRealmShiroServiceImpl" />
+		</property>
+	</bean>
+	
+	<!-- 2、JWTRealm -->
+	<bean id="JWTRealm" class="com.framework.module.common.security.jwt.JWTRealm" />
+	
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 认证策略(多个realm时使用) -->
+	<!-- 1、AtLeastOneSuccessfulStrategy(默认) -->
+	<!-- 只要有一个（或更多）的Realm验证成功，那么认证将被视为成功(所有的realm都会被调用,只不过是第一个认证成功的AuthenticationInfo作为最后的结果返回) -->
+	<!-- <bean id="AtLeastOneSuccessfulStrategy" class="org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy" /> -->
+	
+	<!-- 2、FirstSuccessfulStrategy -->
+	<!-- 第一个Realm验证成功，整体认证将被视为成功，且后续Realm将被忽略 -->
+	<bean id="FirstSuccessfulStrategy" class="org.apache.shiro.authc.pam.FirstSuccessfulStrategy" />
+	
+	<!-- 3、AllSuccessfulStrategy -->
+	<!-- 所有Realm成功，认证才视为成功 -->
+	<!-- <bean id="AllSuccessfulStrategy" class="org.apache.shiro.authc.pam.AllSuccessfulStrategy" /> -->
+	
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ SecurityManager -->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<!-- 认证策略(配在realms前) -->
+		<property name="authenticator">
+			<bean class="org.apache.shiro.authc.pam.ModularRealmAuthenticator">
+				<property name="authenticationStrategy" ref="FirstSuccessfulStrategy" />
+			</bean>		
+		</property>
+		
+		<!-- 按配置的顺序执行 -->
+		<property name="realms">
+			<list>
+				<ref bean="SWTRealm"/>
+				<ref bean="JWTRealm"/>
+			</list>
+		</property>
+		
+		<!-- 使用Shiro的Session(默认使用servlet容器的session) -->
+		<!-- <property name="sessionMode" value="native"/> -->
+	</bean>
+	
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 自定义Filter(可在filterChainDefinitions中直接使用,也可通过filters指定别名再在filterChainDefinitions中使用) -->
+	<bean id="JWTAuthenticationFilter" class="com.framework.module.common.security.jwt.JWTAuthenticationFilter" />
+	
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ shiroFilter -->
+	<!-- id对应着web.xml中配置的Filter Name -->
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager" />
+		
+		<!-- 认证（如登录）失败跳转的链接。（可选，默认自动寻找Web工程根目录下的"/login.jsp"页面） -->
+		<!-- <property name="loginUrl" value="/login.jsp" /> --> 
+		
+		<!-- 认证（如登录）成功跳转的链接 。（可选） -->  
+        <!-- <property name="successUrl" value="/home.jsp" /> --> 
+        
+        <!-- 授权失败跳转的链接 -->
+		<!-- <property name="unauthorizedUrl" value="/unauthorized.jsp"/> --> 
+		
+		<!-- 用于对定义的Filter指定别名,在filterChainDefinitions中使用（可选） -->
+		<!-- 
+		<property name="filters"> 
+			<util:map>
+				<entry key="anAlias" value-ref="someFilter"/> 
+			</util:map> 
+		</property> 
+		-->
+		
+		<!-- Shiro过滤链的定义 --> 
+		<property name="filterChainDefinitions">
+			<!-- <value>
+				/admin/** = authc, roles[admin]
+				/docs/** = authc, perms[document:read]
+				/** = authc
+			</value> -->
+			<!-- /** = JWTAuthenticationFilter -->
+			<!-- <value>
+				/**/*.do = JWTAuthenticationFilter
+			</value> -->
+			<value>
+				/** = JWTAuthenticationFilter
+			</value>
+		</property>
+	</bean>
+
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Shiro 生命周期处理器 -->
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+</beans>	

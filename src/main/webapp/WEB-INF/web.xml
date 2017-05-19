@@ -1,0 +1,95 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 基础配置  -->
+	<display-name>framework</display-name>
+
+	<!-- 首页 -->
+	<welcome-file-list>
+		<welcome-file>/index.html</welcome-file>
+	</welcome-file-list>
+	
+	<!-- session超时 -->
+	<session-config>
+		<!-- 单位(分钟)(默认30分钟) -->
+		<session-timeout>30</session-timeout>
+	</session-config>
+	
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Listener -->
+	<!-- 1、Log4j(在Spring Listener之前) -->
+	<context-param>
+	   <param-name>log4jConfigLocation</param-name>
+	   <param-value>classpath:log4j.properties</param-value>
+    </context-param>
+    <context-param>
+	   <param-name>log4jRefreshInterval</param-name>
+	   <param-value>60000</param-value>
+    </context-param>
+
+    <listener>
+    	<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+    </listener>
+    
+	<!-- 2、Spring -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:spring/applicationContext.xml</param-value>
+	</context-param>
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Servlet -->
+	<!-- 1、Spring MVC -->
+	<servlet>
+		<servlet-name>SpringMVC</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:spring/applicationContext-mvc.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+		<async-supported>true</async-supported>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SpringMVC</servlet-name>
+		<url-pattern>/*</url-pattern>
+		<!-- <url-pattern>/webSocketServer/*</url-pattern> -->
+	</servlet-mapping>
+	
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Filter -->
+	<!-- 1、Shiro -->
+	<filter>
+		<!-- The filter-name matches name of a 'shiroFilter' bean inside applicationContext.xml -->
+        <filter-name>shiroFilter</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+        <init-param>
+        	<!-- true：生命周期由Servlet容器管理;false：生命周期由Spring管理（默认） -->  
+        	<param-name>targetFilterLifecycle</param-name>
+        	<param-value>true</param-value>
+    	</init-param>
+    	<async-supported>true</async-supported>
+    </filter>
+    
+ 	<!-- 2、解决Hibernate延迟加载 -->
+	<filter>  
+        <filter-name>OpenEntityManagerInViewFilter</filter-name>  
+        <filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class> 
+        <async-supported>true</async-supported>
+    </filter>  
+    
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Filter Mapping -->
+	<!-- 1、Shiro -->
+    <filter-mapping>
+        <filter-name>shiroFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+	<!-- 2、解决Hibernate延迟加载  -->
+	<filter-mapping>  
+        <filter-name>OpenEntityManagerInViewFilter</filter-name>  
+        <url-pattern>/*</url-pattern>  
+    </filter-mapping>
+</web-app>

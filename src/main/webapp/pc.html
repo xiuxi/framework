@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>	
+	<title>pc端首页</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="pc端首页description">
+	<meta name="Keywords" content="pc端首页Keywords">
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ css -->
+	
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ jQuery -->
+	<script src="js/jquery/1.11.2/jquery.js"></script>
+	
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ bootstrap -->
+	<!-- <script src="js/bootstrap/3.1.1/bootstrap-3.1.1.js"></script> -->
+	
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 环信SDK -->
+	<script src="js/web_im/1.0.7.2/sdk/json2.js"></script>
+	<script src="js/web_im/1.0.7.2/sdk/strophe.js"></script>
+	<script src="js/web_im/1.0.7.2/sdk/easemob.im-1.0.7.js"></script>
+	<script src="js/web_im/1.0.7.2/sdk/jplayer/jquery.jplayer.min.js"></script>
+	<script src="js/web_im/1.0.7.2/sdk/swfupload/swfupload.cookie.js"></script>
+	<script src="js/web_im/1.0.7.2/sdk/swfupload/swfupload.js"></script>
+	<script src="js/web_im/1.0.7.2/easemob.im.config.js"></script>
+	
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Angular Js -->
+	<!-- 1、Angular Js Core -->
+	<script src="js/angular/1.5.7/angular.js"></script>
+	
+	<!-- 2、thirdParty Modules -->
+	<script src="js/angular/thirdPartyModules/ui-router/0.2.15/angular-ui-router.js"></script>
+	
+	<!-- 3、Custom Modules -->
+	<script src="app/pc/pc-app.js"></script>
+	<script src="js/angular/customModules/controllers.js"></script>
+	
+	<script src="http://cdn.sockjs.org/sockjs-0.3.min.js" type="text/javascript"></script>
+	
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Boostrap -->
+</head>
+<body ng-app="pcApp">
+	<ui-view></ui-view>
+</body>
+</html>
+

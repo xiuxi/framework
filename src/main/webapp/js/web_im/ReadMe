@@ -1,0 +1,6 @@
+环信聊天SDK
+
+依赖除了web_im下的JS外,还依赖如下JS
+jquery-*.js
+
+环信配置信息: easemob.im.config.js    

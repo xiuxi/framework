@@ -1,0 +1,21 @@
+环信：http://www.easemob.com/
+
+
+
+调用环信所有RestAPI接口,同一个IP每秒最多可调用30次, 超过的部分会返回503错误
+
+初始化环信: EmchatContext.newInstance();(调用EmChatApi方法的时候就已完成初始化)
+
+
+入口：EmChatApi.java
+
+
+
+所有环信注册用户密码固定
+
+聊天对象类型全部为users,真正的聊天对象类型定义在扩展字段(ext)中
+
+消息类型全部为txt,消息内容全部为"txt",真正的消息类型、消息内容定义在扩展字段(ext)中
+
+要添加扩展字段可继承VExt类
+

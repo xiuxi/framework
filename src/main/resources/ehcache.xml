@@ -1,0 +1,14 @@
+<ehcache name="default-cache">
+	<!-- 当二级缓存对象数据在内存中溢出时，需要写入文件系统时的文件目录 -->
+    <diskStore path="java.io.tmpdir"/>
+    <!-- 默认的class缓存配置，若某个对象没有其专有的配置时，ehcache一律启用默认配置 -->
+    <defaultCache 
+    	maxElementsInMemory="10000000"
+        maxElementsOnDisk="100000000"
+        eternal="false"
+        timeToIdleSeconds="3600"
+        timeToLiveSeconds="3600"
+        diskExpiryThreadIntervalSeconds="7200"
+        memoryStoreEvictionPolicy="LRU">
+    </defaultCache>
+</ehcache>
